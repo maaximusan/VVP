@@ -1,0 +1,29 @@
+<wpml-config>
+    <custom-fields>
+		<custom-field action="copy-once">thegem_page_data</custom-field>
+		<custom-field action="copy-once">thegem_post_general_item_data</custom-field>
+		<custom-field action="copy-once">thegem_show_featured_posts_slider</custom-field>
+		<custom-field action="copy-once">thegem_product_size_guide_data</custom-field>
+		<custom-field action="copy-once">thegem_product_featured_data</custom-field>
+		<custom-field action="copy-once">thegem_product_disable_hover</custom-field>
+		<custom-field action="copy-once">thegem_product_page_data</custom-field>
+		<custom-field action="translate">thegem_product_description</custom-field>
+		<custom-field action="copy-once">thegem_product_video</custom-field>
+		<custom-field action="copy">thegem_template_type</custom-field>
+		<custom-field action="copy-once">thegem_testimonial_data</custom-field>
+		<custom-field action="copy-once">thegem_popups_data</custom-field>
+		<custom-field action="copy-once">thegem_portfolio_item_data</custom-field>
+		<custom-field action="copy-once">thegem_pf_item_page_elements_data</custom-field>
+		<custom-field action="copy-once">thegem_client_data</custom-field>
+		<custom-field action="copy-once">thegem_team_person_data</custom-field>
+    </custom-fields>
+    <custom-types>
+        <custom-type translate="1" display-as-translated="1">thegem_pf_item</custom-type>
+        <custom-type translate="1" display-as-translated="1">thegem_qf_item</custom-type>
+        <custom-type translate="1" display-as-translated="1">thegem_news</custom-type>
+        <custom-type translate="1" display-as-translated="1">thegem_templates</custom-type>
+    </custom-types>
+    <taxonomies>
+        <taxonomy translate="1" display-as-translated="1">thegem_portfolios</taxonomy>
+    </taxonomies>
+</wpml-config>
