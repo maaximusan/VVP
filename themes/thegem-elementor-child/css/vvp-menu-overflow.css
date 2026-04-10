@@ -1,0 +1,88 @@
+/* desktop priority menu */
+.vvp-priority-menu {
+    min-width: 0 !important;
+}
+
+.vvp-priority-menu .thegem-te-menu,
+.vvp-priority-menu .thegem-te-menu > nav,
+.vvp-priority-menu .thegem-te-menu ul.nav-menu {
+    min-width: 0 !important;
+}
+
+@media (min-width: 769px) {
+    .vvp-priority-menu .thegem-te-menu > nav.desktop-view ul.nav-menu {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        align-items: center;
+        overflow: visible !important;
+    }
+
+    .vvp-priority-menu .thegem-te-menu > nav.desktop-view ul.nav-menu > li.menu-item {
+        flex: 0 0 auto !important;
+        white-space: nowrap;
+    }
+
+    .vvp-priority-menu .thegem-te-menu > nav.desktop-view ul.nav-menu > li.menu-item-widget {
+        display: none !important;
+    }
+
+    .vvp-priority-menu .thegem-te-menu > nav.desktop-view ul.nav-menu > li.vvp-hidden-original {
+        display: none !important;
+    }
+
+    .vvp-priority-menu .vvp-more-item {
+        display: none;
+        position: relative;
+        white-space: nowrap;
+    }
+
+    .vvp-priority-menu .vvp-more-submenu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        left: auto;
+        min-width: 220px;
+        max-width: calc(100vw - 16px);
+        max-height: min(70vh, 520px);
+        overflow-x: hidden;
+        overflow-y: auto;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        z-index: 99999;
+        box-sizing: border-box;
+    }
+
+    .vvp-priority-menu .vvp-more-item.vvp-open > .vvp-more-submenu {
+        display: block !important;
+    }
+
+    .vvp-priority-menu .vvp-more-submenu > li {
+        display: block !important;
+        width: 100%;
+        white-space: normal;
+    }
+
+    .vvp-priority-menu .vvp-more-submenu > li > a {
+        display: block;
+        width: 100%;
+    }
+
+    /* в "Еще" не пытаемся рендерить megamenu */
+    .vvp-priority-menu .vvp-more-submenu .megamenu-template,
+    .vvp-priority-menu .vvp-more-submenu .menu-item-parent-toggle {
+        display: none !important;
+    }
+}
+
+/* 768 и меньше: desktop menu прячем, гамбургер показываем */
+@media (max-width: 768px) {
+    .vvp-priority-menu {
+        display: none !important;
+    }
+
+    .vvp-priority-hamburger {
+        display: block !important;
+    }
+}
