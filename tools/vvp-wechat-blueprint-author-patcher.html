@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ВВП — исправление автора WeChat blueprint</title>
+  <style>
+    body{font-family:Arial,sans-serif;max-width:760px;margin:48px auto;padding:0 20px;color:#111827;line-height:1.55}
+    h1{color:#0B1F3B;font-size:28px} .box{border:1px solid #E5E7EB;border-radius:12px;padding:24px;background:#F6F7F9}
+    input{display:block;margin:18px 0;width:100%} button{background:#C7362F;color:white;border:0;border-radius:8px;padding:12px 18px;font-size:16px;cursor:pointer}
+    button:disabled{opacity:.5;cursor:not-allowed}.ok{color:#166534}.err{color:#B45309}code{background:white;padding:2px 5px;border-radius:4px}
+  </style>
+</head>
+<body>
+  <h1>Добавить автора в WeChat blueprint ВВП</h1>
+  <div class="box">
+    <p>Выберите текущий JSON-blueprint. Инструмент локально добавит автора <code>VVP编辑部</code> в модули 13 и 3619, проверит обе ветки и сохранит новый файл.</p>
+    <input id="file" type="file" accept="application/json,.json">
+    <button id="run" disabled>Исправить и скачать blueprint</button>
+    <p id="status"></p>
+  </div>
+<script>
+(() => {
+  const fileInput = document.getElementById('file');
+  const runButton = document.getElementById('run');
+  const status = document.getElementById('status');
+  fileInput.addEventListener('change', () => { runButton.disabled = !fileInput.files.length; status.textContent=''; });
+
+  function walk(flow, out=[]) {
+    for (const module of (flow || [])) {
+      out.push(module);
+      for (const route of (module.routes || [])) walk(route.flow, out);
+      for (const handler of (module.onerror || [])) out.push(handler);
+    }
+    return out;
+  }
+
+  runButton.addEventListener('click', async () => {
+    try {
+      const file = fileInput.files[0];
+      if (!file) throw new Error('Файл не выбран.');
+      const text = await file.text();
+      const data = JSON.parse(text);
+      if (!Array.isArray(data.flow)) throw new Error('Это не blueprint Make: отсутствует массив flow.');
+
+      const modules = walk(data.flow);
+      const ids = modules.filter(m => m && m.id !== undefined).map(m => m.id);
+      if (new Set(ids).size !== ids.length) throw new Error('В исходном blueprint обнаружены повторяющиеся ID модулей.');
+      const byId = new Map(modules.map(m => [m.id, m]));
+
+      const targetIds = [13, 3619];
+      const oldFragment = "      title,\n      digest,";
+      const newFragment = "      title,\n      author: 'VVP编辑部',\n      digest,";
+      const changed = [];
+
+      for (const id of targetIds) {
+        const module = byId.get(id);
+        const code = module?.mapper?.codeEditorJavascript;
+        if (typeof code !== 'string') throw new Error(`Не найден JavaScript-код модуля ${id}.`);
+        if (code.includes("author: 'VVP编辑部'")) continue;
+        if (!code.includes(oldFragment)) throw new Error(`В модуле ${id} не найдена ожидаемая точка вставки автора.`);
+        module.mapper.codeEditorJavascript = code.replace(oldFragment, newFragment);
+        changed.push(id);
+      }
+
+      for (const id of targetIds) {
+        const code = byId.get(id).mapper.codeEditorJavascript;
+        if ((code.match(/author: 'VVP编辑部'/g) || []).length !== 1) throw new Error(`Автор в модуле ${id} добавлен некорректно.`);
+        if (!code.includes('content: imageBlock + sourceContent')) throw new Error(`В модуле ${id} утрачена вставка изображения в статью.`);
+        if (!code.includes('show_cover_pic: 0')) throw new Error(`В модуле ${id} изменилась настройка обложки.`);
+      }
+      for (const id of [3622,3623,3624,3625]) if (!byId.has(id)) throw new Error(`Не найден модуль изображения ${id}. Выбран не тот blueprint.`);
+
+      data.name = 'VVP — WeChat — Китайские статьи — фото и автор в статье';
+      const output = JSON.stringify(data, null, 4);
+      JSON.parse(output);
+      const authorCount = (output.match(/author: 'VVP编辑部'/g) || []).length;
+      if (authorCount !== 2) throw new Error(`Итоговая проверка автора не пройдена: найдено ${authorCount} вхождений вместо 2.`);
+
+      const blob = new Blob([output], {type:'application/json;charset=utf-8'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'VVP — WeChat — Китайские статьи — фото и автор в статье.blueprint.json';
+      document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+      status.className='ok';
+      status.textContent = `Готово. Проверено модулей: ${ids.length}. Автор установлен в обеих ветках. Изменены модули: ${changed.length ? changed.join(', ') : 'уже были исправлены'}.`;
+    } catch (e) {
+      status.className='err'; status.textContent='Ошибка: ' + e.message;
+    }
+  });
+})();
+</script>
+</body>
+</html>
