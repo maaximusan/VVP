@@ -1,0 +1,10 @@
+*.sqlite3
+*.sqlite3-*
+__pycache__/
+*.py[cod]
+.venv/
+auth/
+cookies/
+screenshots/
+secrets/
+*.jsonl
