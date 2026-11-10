@@ -1,0 +1,26 @@
+name: REDnote worker checks
+
+on:
+  pull_request:
+    paths:
+      - 'tools/rednote/**'
+      - '.github/workflows/rednote-unit-tests.yml'
+  push:
+    branches:
+      - 'feature/rednote-full-auto-20261110'
+
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile Python
+        run: python -m compileall -q tools/rednote
+      - name: Test validation and idempotency
+        env:
+          PYTHONPATH: tools/rednote
+        run: python -m unittest discover -s tools/rednote/tests -v
