@@ -1,0 +1,14 @@
+{
+  "job_id": "vvp:wp:98765:zh-hans:rednote:v1",
+  "wp_post_id": 98765,
+  "language": "zh-hans",
+  "title": "中俄商务合作",
+  "body": "这是示例文本，不要在实际账号发布。",
+  "tags": [
+    "中俄合作"
+  ],
+  "media_type": "images",
+  "media_paths": [
+    "/srv/vvp-media/rednote/inbox/98765/cover.png"
+  ]
+}
